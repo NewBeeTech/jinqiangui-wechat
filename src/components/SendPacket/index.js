@@ -76,17 +76,72 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#E65432',
     borderRadius: 5,
+  },
+  modal: {
+    width,
+    height,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: 0,
+    top: 0,
+    backgroundColor: 'rgba(85, 85, 85, 0.8)',
+  },
+  modalAlert: {
+    width: width*0.7,
+    height: width*0.7,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    top: -100,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(216, 239, 217, 0.8)',
+    paddingBottom: 10,
+  },
+  modalBody: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  modalMoney: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(233, 233, 233, 0.8)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(233, 233, 233, 0.8)',
+    padding: 10,
+  },
+  modalInput: {
+    width: 40,
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'rgba(233, 233, 233, 0.8)',
+    fontSize: 25,
+    lineHeight: 40,
+    textAlign: 'center',
   }
 })
 
 class SendPacket extends React.PureComponent {
   state={
     totalMoney: 0,
+    showModal: false,
   };
   changeTotalMoney(text) {
     this.setState({
       totalMoney: Number(text),
     });
+  }
+  passwordChange(text, index) {
+    this.refs[`ref${index+1}`] && this.refs[`ref${index+1}`].focus();
+    if (index === 6) {
+      this.props.navigator.pop();
+    }
   }
   render() {
     return (
@@ -132,12 +187,51 @@ class SendPacket extends React.PureComponent {
       <View style={ styles.totalMoney } >
         <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{`${this.state.totalMoney}.00`}</Text>
       </View>
-      <TouchableHighlight style={styles.sendBtn}>
+      <TouchableHighlight style={styles.sendBtn} onPress={() => this.setState({ showModal: true })}>
         <View>
           <Text style={{ color: 'white', fontSize: 18 }}>塞钱进红包</Text>
         </View>
       </TouchableHighlight>
       <Image style={styles.snow} source={require('../../assets/snow.png')} />
+      <View
+        style={{
+          width,
+          height,
+          position: 'absolute',
+          alignItems: 'center',
+          justifyContent: 'center',
+          left: 0,
+          top: 0,
+          backgroundColor: 'rgba(85, 85, 85, 0.8)',
+          display: this.state.showModal ? '' : 'none',
+        }}
+      >
+        <View style={styles.modalAlert}>
+          <View style={styles.modalHeader}>
+            <TouchableHighlight onPress={() => this.setState({ showModal: false })}>
+            <Image source={require('../../assets/close.png')} style={{ width: 12, height: 12 }} />
+            </TouchableHighlight>
+            <Text style={{ textAlign: 'center', width: '90%', fontSize: 16 }}>请输入支付密码</Text>
+          </View>
+          <View style={styles.modalBody}>
+            <Text>微信红包{this.state.showModal? 'true': 'false'}</Text>
+            <Text style={{ fontSize: 40, margin: 10 }}>￥{`${this.state.totalMoney}.00`}</Text>
+          </View>
+          <View style={styles.modalMoney}>
+            <Image source={require('../../assets/money.png')} style={{ height: 22, width: 22, marginRight: 10 }} />
+            <Text style={{ fontSize: 16, color: '#AAAAAA', width: 200}}>零钱</Text>
+            <Image source={require('../../assets/arrow-right.png')} style={{ height: 12, width: 12 }} />
+          </View>
+          <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <TextInput ref="ref1" autoFocus secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 1)} />
+            <TextInput ref="ref2" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 2)} />
+            <TextInput ref="ref3" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 3)} />
+            <TextInput ref="ref4" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 4)} />
+            <TextInput ref="ref5" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 5)} />
+            <TextInput ref="ref6" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 6)} />
+          </View>
+        </View>
+      </View>
       </View>
     );
   }
