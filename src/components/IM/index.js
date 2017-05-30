@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import SendPacket from '../SendPacket';
 const {height, width} = Dimensions.get('window');
 
@@ -30,9 +30,14 @@ class IM extends React.PureComponent {
     showInputDetail: false,
   };
   changeInputStatus() {
+    this.getPackets();
     this.setState({
       showInputDetail: !this.state.showInputDetail,
     });
+  }
+  async getPackets() {
+    const value = await AsyncStorage.getItem('packets');
+    console.warn(value);
   }
   goToSendPacket() {
     this.props.navigator.push({

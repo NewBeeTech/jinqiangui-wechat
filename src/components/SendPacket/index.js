@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TextInput, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
+import { View, Text, Image, TextInput, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback, TouchableHighlight, AsyncStorage } from 'react-native';
 const {height, width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -130,6 +130,8 @@ const styles = StyleSheet.create({
 class SendPacket extends React.PureComponent {
   state={
     totalMoney: 0,
+    packetNumber: 0,
+    description: '',
     showModal: false,
   };
   changeTotalMoney(text) {
@@ -137,9 +139,35 @@ class SendPacket extends React.PureComponent {
       totalMoney: Number(text),
     });
   }
-  passwordChange(text, index) {
+  changePacketNumber(text) {
+    this.setState({
+      packetNumber: Number(text),
+    })
+  }
+  changeDescription(text) {
+    this.setState({
+      description: text,
+    })
+  }
+  async passwordChange(text, index) {
     this.refs[`ref${index+1}`] && this.refs[`ref${index+1}`].focus();
     if (index === 6) {
+      const packets = await AsyncStorage.getItem('packets');
+      if (packets) {
+        let packetsObject = JSON.parse(packets);
+        packetsObject.push({
+          totalMoney: this.state.totalMoney,
+          packetNumber: this.state.packetNumber,
+          description: this.state.description,
+        });
+        await AsyncStorage.setItem('packets', JSON.stringify(packetsObject));
+      } else {
+        await AsyncStorage.setItem('packets', JSON.stringify([{
+          totalMoney: this.state.totalMoney,
+          packetNumber: this.state.packetNumber,
+          description: this.state.description,
+        }]));
+      }
       this.props.navigator.pop();
     }
   }
@@ -171,7 +199,7 @@ class SendPacket extends React.PureComponent {
           <Text style={{ fontSize: 18 }}>红包个数</Text>
         </View>
         <View style={styles.totalNumberRight}>
-          <TextInput style={{ height: 50, width: 80, textAlign: 'right' }} placeholder="填写个数" />
+          <TextInput style={{ height: 50, width: 80, textAlign: 'right' }} placeholder="填写个数" onChangeText={(text) => this.changePacketNumber(text)} />
           <Text style={{ fontSize: 18, marginLeft: 10 }}>个</Text>
         </View>
       </View>
@@ -183,6 +211,7 @@ class SendPacket extends React.PureComponent {
         placeholder="恭喜发财，大吉大利"
         multiline
         placeholderTextColor="#AAAAAA"
+        onTextChange={(text) => this.changeDescription(text)}
       />
       <View style={ styles.totalMoney } >
         <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{`${this.state.totalMoney}.00`}</Text>
