@@ -104,8 +104,8 @@ class SendPacket extends React.PureComponent {
           <Text style={{ fontSize: 18 }}>总金额</Text>
         </View>
         <View style={styles.totalNumberRight}>
-          <TextInput style={{ height: 50, width: 50 }} placeholder="0.00" onChangeText={(text) => this.changeTotalMoney(text)} />
-          <Text style={{ fontSize: 18 }}>元</Text>
+          <TextInput style={{ height: 50, width: 50, textAlign: 'right' }} placeholder="0.00" onChangeText={(text) => this.changeTotalMoney(text)} />
+          <Text style={{ fontSize: 18, marginLeft: 10 }}>元</Text>
         </View>
       </View>
       <View style={ styles.description }>
@@ -116,8 +116,8 @@ class SendPacket extends React.PureComponent {
           <Text style={{ fontSize: 18 }}>红包个数</Text>
         </View>
         <View style={styles.totalNumberRight}>
-          <TextInput style={{ height: 50, width: 80 }} placeholder="填写个数" />
-          <Text style={{ fontSize: 18 }}>个</Text>
+          <TextInput style={{ height: 50, width: 80, textAlign: 'right' }} placeholder="填写个数" />
+          <Text style={{ fontSize: 18, marginLeft: 10 }}>个</Text>
         </View>
       </View>
       <View style={styles.description}>
