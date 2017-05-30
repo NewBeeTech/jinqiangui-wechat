@@ -9,27 +9,11 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  NavigatorIOS,
 } from 'react-native';
-
-export default class JinqianguiWechat extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+import Index  from './src/components/Index';
+import IM from './src/components/IM';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,5 +33,25 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+
+export default class JinqianguiWechat extends Component {
+  render() {
+    return (
+      <NavigatorIOS
+        initialRoute={{
+          component: Index,
+          title: '微信(121)',
+        }}
+        style={{flex: 1}}
+        tintColor="white"
+        titleTextColor="white"
+        barTintColor="black"
+        rightButtonSystemIcon="add"
+      />
+    );
+  }
+}
+
 
 AppRegistry.registerComponent('JinqianguiWechat', () => JinqianguiWechat);
