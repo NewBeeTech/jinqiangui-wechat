@@ -184,6 +184,9 @@ class SendPacket extends React.PureComponent {
       }
     }
   }
+  async clearPackets() {
+    await AsyncStorage.setItem('packets', '[]');
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -234,7 +237,9 @@ class SendPacket extends React.PureComponent {
           <Text style={{ color: 'white', fontSize: 18 }}>塞钱进红包</Text>
         </View>
       </TouchableHighlight>
-      <Image style={styles.snow} source={require('../../assets/snow.png')} />
+      <TouchableHighlight style={styles.snow} onPress={() => this.clearPackets()}>
+        <Image style={styles.snow} source={require('../../assets/snow.png')} />
+      </TouchableHighlight>
       <View
         style={{
           width,
