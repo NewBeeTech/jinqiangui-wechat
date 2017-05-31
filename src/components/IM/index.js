@@ -56,7 +56,14 @@ class IM extends React.PureComponent {
   }
   renderPackets() {
     const views = [];
-    return this.state.packets && this.state.packets.map((item, key) => <RedPacket title={item.description} />);
+    return this.state.packets && this.state.packets.map((item, key) => {
+      return(
+        <View style={{ flexDirection: 'column', alignItems: 'center'}}>
+          <Text style={{ marginTop: 10, textAlign: 'center', width: 50, color: 'white', backgroundColor: 'rgba(200, 200, 200, 1.00)', borderRadius: 10, }}>{new Date(item.date).getHours()}:{new Date(item.date).getMinutes()}</Text>
+          <RedPacket title={item.description} />
+        </View>
+      );
+    });
   }
   goToSendPacket() {
     this.props.navigator.push({
@@ -73,6 +80,13 @@ class IM extends React.PureComponent {
       navigationBarHidden: true,
     })
   }
+  scrollContent(width, totalHeight) {
+    if (totalHeight < height) {
+
+    } else {
+      this._scrollView.scrollTo({y:(totalHeight-height+100)});
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -83,7 +97,7 @@ class IM extends React.PureComponent {
       <ScrollView
         style={styles.text}
         ref={(scrollView) => { this._scrollView = scrollView; }}
-        onContentSizeChange={(width,totalHeight) => this._scrollView.scrollTo({y:(totalHeight-height+100)})}
+        onContentSizeChange={(width,totalHeight) => this.scrollContent(width, totalHeight)}
       >
         {this.renderPackets()}
         {/* <RedPacket title="测试" /> */}

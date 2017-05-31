@@ -159,6 +159,7 @@ class SendPacket extends React.PureComponent {
           totalMoney: this.state.totalMoney,
           packetNumber: this.state.packetNumber,
           description: this.state.description,
+          date: new Date(),
         });
         await AsyncStorage.setItem('packets', JSON.stringify(packetsObject));
         this.props.navigator.pop({
@@ -178,6 +179,7 @@ class SendPacket extends React.PureComponent {
               totalMoney: this.state.totalMoney,
               packetNumber: this.state.packetNumber,
               description: this.state.description,
+              date: new Date(),
             }],
           }
         });
