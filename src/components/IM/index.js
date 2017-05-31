@@ -1,18 +1,19 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Dimensions, StatusBar, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import SendPacket from '../SendPacket';
 const {height, width} = Dimensions.get('window');
+import RedPacket from './RedPacket';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'rgba(232, 232, 232, 1.00)',
   },
   indexPhoto: {
     width: width,
     height: height,
   },
   text: {
-    marginTop: 64,
     flex: 1,
   },
   input: {
@@ -28,16 +29,34 @@ const styles = StyleSheet.create({
 class IM extends React.PureComponent {
   state={
     showInputDetail: false,
+    packets: [],
   };
+  async componentWillMount() {
+    const value = await AsyncStorage.getItem('packets');
+    this.setState({
+      packets: JSON.parse(value) || [],
+    });
+    if (this._scrollView) {
+      // this._scrollView.scrollTo(0);
+      // console.warn(this._scrollView.contentOffset.y);
+      // this._scrollView.scrollToEnd({animated: false});
+    }
+  }
+  async componentWillReceiveProps(nextProps) {
+    console.warn('cwr', JSON.stringify(nextProps));
+    const value = await AsyncStorage.getItem('packets');
+    this.setState({
+      packets: JSON.parse(value) || [],
+    });
+  }
   changeInputStatus() {
-    this.getPackets();
     this.setState({
       showInputDetail: !this.state.showInputDetail,
     });
   }
-  async getPackets() {
-    const value = await AsyncStorage.getItem('packets');
-    console.warn(value);
+  renderPackets() {
+    const views = [];
+    return this.state.packets && this.state.packets.map((item, key) => <RedPacket title={item.description} />);
   }
   goToSendPacket() {
     this.props.navigator.push({
@@ -61,7 +80,14 @@ class IM extends React.PureComponent {
           backgroundColor="white"
           barStyle="light-content"
         />
-      <Text style={styles.text}>IMsdsdjfklsdfjlsdkfdlskfjsldfjsdklfsdkfjlsdkfjlsdkfjlsdkfjlksdfjlsdfjksdlfjdlskfjlkkkjjsdfkjjjsdffkjsdlf</Text>
+      <ScrollView
+        style={styles.text}
+        ref={(scrollView) => { this._scrollView = scrollView; }}
+        onContentSizeChange={(width,totalHeight) => this._scrollView.scrollTo({y:(totalHeight-height+100)})}
+      >
+        {this.renderPackets()}
+        {/* <RedPacket title="测试" /> */}
+      </ScrollView>
       { this.state.showInputDetail ||
         <TouchableWithoutFeedback onPress={() => this.changeInputStatus()}>
           <Image

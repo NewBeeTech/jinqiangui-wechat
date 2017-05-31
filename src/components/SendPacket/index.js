@@ -161,14 +161,27 @@ class SendPacket extends React.PureComponent {
           description: this.state.description,
         });
         await AsyncStorage.setItem('packets', JSON.stringify(packetsObject));
+        this.props.navigator.pop({
+          passProps: {
+            packets: packetsObject,
+          }
+        });
       } else {
         await AsyncStorage.setItem('packets', JSON.stringify([{
           totalMoney: this.state.totalMoney,
           packetNumber: this.state.packetNumber,
           description: this.state.description,
         }]));
+        this.props.navigator.pop({
+          passProps: {
+            packets: [{
+              totalMoney: this.state.totalMoney,
+              packetNumber: this.state.packetNumber,
+              description: this.state.description,
+            }],
+          }
+        });
       }
-      this.props.navigator.pop();
     }
   }
   render() {
@@ -211,7 +224,7 @@ class SendPacket extends React.PureComponent {
         placeholder="恭喜发财，大吉大利"
         multiline
         placeholderTextColor="#AAAAAA"
-        onTextChange={(text) => this.changeDescription(text)}
+        onChangeText={(text) => this.changeDescription(text)}
       />
       <View style={ styles.totalMoney } >
         <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{`${this.state.totalMoney}.00`}</Text>
