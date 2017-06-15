@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import Index  from './src/components/Index';
 import IM from './src/components/IM';
-
+import Detail from './src/components/PacketDetail'
 const styles = StyleSheet.create({
   container: {
     flex: 1,

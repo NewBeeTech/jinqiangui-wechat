@@ -9,12 +9,13 @@ import {
 import { NativeRouter, Route, Link } from 'react-router-native'
 import Index from './src/components/Index';
 import IM from './src/components/IM';
-
+import PacketDetail from './src/components/PacketDetail'
 const App = () => (
   <NativeRouter>
     <View style={styles.container}>
       <Route exact path="/" component={Index}/>
       <Route exact path="/IM" component={IM}/>
+      <PacketDetail exact path="/Detail" component={PacketDetail}>
     </View>
   </NativeRouter>
 );

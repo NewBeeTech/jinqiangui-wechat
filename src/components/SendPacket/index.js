@@ -134,6 +134,9 @@ class SendPacket extends React.PureComponent {
     description: '',
     showModal: false,
   };
+  componentWillReceiveProps(nextProps){
+    console.log('nextProps',nextProps)
+  }
   changeTotalMoney(text) {
     this.setState({
       totalMoney: Number(text),
@@ -149,17 +152,21 @@ class SendPacket extends React.PureComponent {
       description: text,
     })
   }
+
+
+
   async passwordChange(text, index) {
     this.refs[`ref${index+1}`] && this.refs[`ref${index+1}`].focus();
     if (index === 6) {
-      const packets = await AsyncStorage.getItem('packets');
+      var packets = await AsyncStorage.getItem('packets');
+      packets = packets || JSON.stringify([]);
       if (packets) {
         let packetsObject = JSON.parse(packets);
         packetsObject.push({
           totalMoney: this.state.totalMoney,
           packetNumber: this.state.packetNumber,
           description: this.state.description,
-          date: new Date(),
+          date: (new Date()).valueOf(),
         });
         await AsyncStorage.setItem('packets', JSON.stringify(packetsObject));
         this.props.navigator.pop({
@@ -167,6 +174,7 @@ class SendPacket extends React.PureComponent {
             packets: packetsObject,
           }
         });
+        this.props.callBack(3)
       } else {
         await AsyncStorage.setItem('packets', JSON.stringify([{
           totalMoney: this.state.totalMoney,
