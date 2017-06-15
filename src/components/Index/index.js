@@ -14,7 +14,9 @@ class Index extends React.PureComponent {
   constructor(props){
     super(props)
     this.state = {
-      redPacketCount:3
+      redPacketCount:3,
+      money_arr:[0.95,0.95,0.5],
+      totalMoney:20
     }
   }
 

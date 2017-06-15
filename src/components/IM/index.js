@@ -30,7 +30,8 @@ class IM extends React.PureComponent {
   state={
     showInputDetail: false,
     packets: [],
-    showLast:0
+    showLast:0,
+    infoShow:false
   };
   async componentWillMount() {
     await AsyncStorage.clear()
@@ -97,7 +98,7 @@ class IM extends React.PureComponent {
   }
   changeInputStatus() {
     this.setState({
-      showInputDetail: !this.state.showInputDetail,
+      showInputDetail: !this.state.showInputDetail
     });
   }
   renderPackets() {
@@ -127,7 +128,10 @@ class IM extends React.PureComponent {
       navigationBarHidden: true,
       passProps:{
         callBack:(count)=>{
-          this._delayRender(this.props.redPacketCount)
+          this._delayRender(this.props.redPacketCount);
+          this.setState({
+            infoShow:true
+          })
         }
       }
     })
@@ -166,14 +170,14 @@ class IM extends React.PureComponent {
           backgroundColor="white"
           barStyle="light-content"
         />
-        <View style={{position:'absolute',backgroundColor:'rgba(55,55,55,0.5)',width:width,top:64,alignItems:'center'}}>
+        {this.state.infoShow && <View style={{position:'absolute',zIndex:99,backgroundColor:'rgba(55,55,55,0.5)',width:width,top:64,alignItems:'center'}}>
           <Text style={{fontSize:25,color:'yellow',marginTop:8}}>正版金钱龟</Text>
           <Text style={{fontSize:13,color:'white',marginTop:8}}>您成功设置了{money_arr.length}个领取金额：{this.getMoney(money_arr)}</Text>
           <Text style={{fontSize:13,color:'white',marginTop:4}}>数据采集分析如下：</Text>
           {this.anaList(money_arr)}
           <Text style={{fontSize:13,color:'white',marginTop:4}}>请核对领取的红包金额是否准确</Text>
 
-        </View>
+        </View>}
       <ScrollView
         style={styles.text}
         ref={(scrollView) => { this._scrollView = scrollView; }}
