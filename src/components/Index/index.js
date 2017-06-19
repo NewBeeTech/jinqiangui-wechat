@@ -14,7 +14,7 @@ class Index extends React.PureComponent {
   constructor(props){
     super(props)
     this.state = {
-      redPacketCount:3,
+      totalCount:3,
       money_arr:[0.95,0.95,0.5],
       totalMoney:20
     }
@@ -40,6 +40,7 @@ class Index extends React.PureComponent {
     let url = event.url
     let totalCount = this.getQueryString(url,'totalCount')
     let totalMoney = this.getQueryString(url,'totalMoney')
+    console.log('totalMoney',totalMoney,totalCount)
     var money_arr = [];
     for(var i = 0;i < 4;i++) {
       let money = this.getQueryString(url,`money${i+1}`)
@@ -60,13 +61,14 @@ class Index extends React.PureComponent {
           barStyle="light-content"
         />
       <TouchableWithoutFeedback onPress={() => this.props.navigator.push({
-              title: 'IM',
+              title: '金钱龟测试群（12）',
               component: IM,
               backButtonTitle: 'close',
               passProps:{
                  redPacketCount:this.state.totalCount,
                  totalMoney:this.state.totalMoney,
-                  money_arr:this.state.money_arr
+                  money_arr:this.state.money_arr,
+                  navBarHidden:this.props.navBarHidden
               },
               rightButtonIcon: require('../../assets/people.png'),
             })}>

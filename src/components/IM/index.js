@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, Dimensions, StatusBar, Touch
 import SendPacket from '../SendPacket';
 const {height, width} = Dimensions.get('window');
 import RedPacket from './RedPacket';
-
+import PacketDetail from '../PacketDetail'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -34,7 +34,6 @@ class IM extends React.PureComponent {
     infoShow:false
   };
   async componentWillMount() {
-    await AsyncStorage.clear()
     const value = await AsyncStorage.getItem('packets');
     this.setState({
       packets: JSON.parse(value) || [],
@@ -67,7 +66,7 @@ class IM extends React.PureComponent {
 
   _delayRender(item){
     for(var i = 0;i < item;i++){
-      this.timer = setTimeout(
+      setTimeout(
           ()=>{
             console.log('out',this.state.showLast)
               this.setState({
@@ -78,7 +77,7 @@ class IM extends React.PureComponent {
     }
   }
 
-  _renderGetRedPacket(count){
+  _renderGetRedPacket(count,item){
     var items = [];
     for (var i = 0;i < count;i++){
       items.push((
@@ -86,10 +85,23 @@ class IM extends React.PureComponent {
             <Image source={require('../../assets/smallRed.png')} style={{width:8,height:12}}/>
             <Text onPress={(i)=>{
 
-            }} style={{fontSize:12,color:'white'}}>测试已经领取了<Text style={{fontSize:12,color:'rgb(247,157,69)'}}>红包</Text>{this.props.redPacketCount === i+1 && "，您的红包已经被领完"}</Text>
+            }} style={{fontSize:12,color:'white'}}>测试已经领取了<Text onPress={()=>{
+              this.props.navigator.push({
+                title:'红包详情',
+                component:PacketDetail,
+                onLeftButtonPress:()=>this.props.navBarHidden(true),
+                passProps:{
+                  redPacketCount:item.redPacketCount,
+                  totalMoney:item.totalMoney,
+                  money_arr:item.money_arr,
+                  packetTitle:item.description,
+                  navBarHidden:this.props.navBarHidden
+                }
+              })
+            }} style={{fontSize:12,color:'rgb(247,157,69)'}}>红包</Text>{item.redPacketCount == i+1 && "，您的红包已经被领完"}</Text>
           </View>))
     }
-    if(count === this.props.redPacketCount){
+    if(count === item.redPacketCount){
       this.setState({
         showTopAlert:true
       })
@@ -105,10 +117,10 @@ class IM extends React.PureComponent {
     return this.state.packets && this.state.packets.map((item, key) => {
           console.log('item',item);
       return (
-        <View style={{ flexDirection: 'column', alignItems: 'center'}}>
+        <View key={key} style={{ flexDirection: 'column', alignItems: 'center'}}>
           <Text style={{ marginTop: 10, textAlign: 'center', width: 50, color: 'white', backgroundColor: 'rgba(200, 200, 200, 1.00)', borderRadius: 10, }}>{new Date(item.date).getHours()}:{new Date(item.date).getMinutes()}</Text>
           <RedPacket title={item.description} />
-          {this._renderGetRedPacket(this.state.showLast)}
+          {key == this.state.packets.length - 1 && this.state.infoShow ? this._renderGetRedPacket(this.state.showLast,item) : this._renderGetRedPacket(this.props.redPacketCount,item)}
         </View>
       );
     });
@@ -127,10 +139,19 @@ class IM extends React.PureComponent {
       shadowHidden: true,
       navigationBarHidden: true,
       passProps:{
+        redPacketCount:this.props.redPacketCount,
+        totalMoney:this.props.totalMoney,
+        money_arr:this.props.money_arr,
         callBack:(count)=>{
-          this._delayRender(this.props.redPacketCount);
+          this._delayRender(count);
           this.setState({
             infoShow:true
+          },()=>{
+            setTimeout(()=>{
+              this.setState({
+                infoShow:false
+              })
+            },1000 * 10)
           })
         }
       }

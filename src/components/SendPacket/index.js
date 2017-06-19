@@ -163,10 +163,11 @@ class SendPacket extends React.PureComponent {
       if (packets) {
         let packetsObject = JSON.parse(packets);
         packetsObject.push({
-          totalMoney: this.state.totalMoney,
-          packetNumber: this.state.packetNumber,
+          totalMoney: this.props.totalMoney,
+          redPacketCount: this.props.redPacketCount,
+          money_arr:this.props.money_arr,
           description: this.state.description,
-          date: (new Date()).valueOf(),
+          date: (new Date()).valueOf()
         });
         await AsyncStorage.setItem('packets', JSON.stringify(packetsObject));
         this.props.navigator.pop({
@@ -174,7 +175,7 @@ class SendPacket extends React.PureComponent {
             packets: packetsObject,
           }
         });
-        this.props.callBack(3)
+        this.props.callBack(this.props.redPacketCount)
       } else {
         await AsyncStorage.setItem('packets', JSON.stringify([{
           totalMoney: this.state.totalMoney,
@@ -230,7 +231,7 @@ class SendPacket extends React.PureComponent {
         </View>
       </View>
       <View style={styles.description}>
-        <Text style={{ color: '#AAAAAA' }}>本群共3人</Text>
+        <Text style={{ color: '#AAAAAA' }}>本群共12人</Text>
       </View>
       <TextInput
         style={styles.textArea}
@@ -271,7 +272,7 @@ class SendPacket extends React.PureComponent {
             <Text style={{ textAlign: 'center', width: '90%', fontSize: 16 }}>请输入支付密码</Text>
           </View>
           <View style={styles.modalBody}>
-            <Text>微信红包{this.state.showModal? 'true': 'false'}</Text>
+            <Text>微信红包</Text>
             <Text style={{ fontSize: 40, margin: 10 }}>￥{`${this.state.totalMoney}.00`}</Text>
           </View>
           <View style={styles.modalMoney}>

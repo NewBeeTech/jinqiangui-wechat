@@ -36,18 +36,54 @@ const styles = StyleSheet.create({
 
 
 export default class JinqianguiWechat extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      tintColor:'white',
+      titleTextColor:'white',
+      barTintColor:'black',
+      shadowHidden:false,
+      translucent:true
+    }
+  }
+
   render() {
     return (
       <NavigatorIOS
         initialRoute={{
           component: Index,
-          title: '微信(121)',
+          title: '微信',
+          passProps:{
+            navBarHidden:(normal)=>{
+              if(normal){
+                this.setState({
+                  tintColor:'white',
+                  titleTextColor:'white',
+                  barTintColor:'black',
+                  shadowHidden:false,
+                  translucent:true
+                })
+              }else{
+                this.setState({
+                  tintColor:'rgb(225,229,183)',
+                  titleTextColor:'rgb(225,229,183)',
+                  barTintColor:'rgb(214,90,69)',
+                  shadowHidden:true,
+                  translucent:false
+                })
+              }
+
+            }
+          }
         }}
         style={{flex: 1}}
-        tintColor="white"
-        titleTextColor="white"
-        barTintColor="black"
+        tintColor={this.state.tintColor}
+        titleTextColor={this.state.titleTextColor}
+        barTintColor={this.state.barTintColor}
         rightButtonSystemIcon="add"
+        navigationBarHidden={this.state.navBarHidden}
+        shadowHidden={this.state.shadowHidden}
+        translucent={this.state.translucent}
       />
     );
   }
