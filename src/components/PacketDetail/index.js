@@ -42,7 +42,10 @@ class Index extends React.PureComponent {
   }
 
   setRandomNumber(money){
-    var random_money = parseFloat(toDecimal2(Math.random() * 100))
+    if(money < 0){
+      return
+    }
+    var random_money = parseFloat(toDecimal2(Math.random() * 10))
     console.log('random_money',money,random_money)
     if(money > random_money){
       console.log('random_money>>>___',money,random_money)
@@ -101,9 +104,9 @@ class Index extends React.PureComponent {
                 <Image style={{width:40,height:40,borderRadius:4}} source={require('../../assets/avator.png')}/>
                 <View style={{marginLeft:10}}>
                   <Text style={{marginTop:4}}>金钱龟{index+1}</Text>
-                  <Text style={{marginTop:4,color:'#999999'}}>20:36</Text>
+                  <Text style={{marginTop:4,color:'#999999'}}>{new Date(this.props.date).getHours()}:{new Date(this.props.date).getMinutes()}</Text>
                 </View>
-                <Text style={{position:'absolute',right:0,top:4}}>{item}</Text>
+                <Text style={{position:'absolute',right:0,top:4}}>{item}元</Text>
               </View>
             </View>
             {index !== list.length - 1 && <View style={{marginLeft:15,height:0.5,backgroundColor:'#f2f2f2'}}/>}

@@ -97,7 +97,8 @@ class IM extends React.PureComponent {
                   totalMoney:item.totalMoney,
                   money_arr:item.money_arr,
                   packetTitle:item.description,
-                  navBarHidden:this.props.navBarHidden
+                  navBarHidden:this.props.navBarHidden,
+                  date:item.date
                 }
               })
             }} style={{fontSize:12,color:'rgb(247,157,69)'}}>红包</Text>{item.redPacketCount == i+1 && "，您的红包已经被领完"}</Text>
@@ -115,11 +116,20 @@ class IM extends React.PureComponent {
       showInputDetail: !this.state.showInputDetail
     });
   }
+  _renderTime(item,key){
+    let time = new Date(item.date).getHours() + ":" + new Date(item.date).getMinutes()
+    if(key == this.state.packets.length - 1){
+      AsyncStorage.setItem('lastPacketTime',time).then(success=>{
+
+      })
+    }
+    return time
+  }
   renderPackets() {
     return this.state.packets && this.state.packets.map((item, key) => {
       return (
         <View key={key} style={{ flexDirection: 'column', alignItems: 'center'}}>
-          <Text style={{ marginTop: 10, textAlign: 'center', width: 50, color: 'white', backgroundColor: 'rgba(200, 200, 200, 1.00)', borderRadius: 10, }}>{new Date(item.date).getHours()}:{new Date(item.date).getMinutes()}</Text>
+          <Text style={{ marginTop: 10, textAlign: 'center', width: 50, color: 'white', backgroundColor: 'rgba(200, 200, 200, 1.00)', borderRadius: 10, }}>{this._renderTime(item,key)}</Text>
           <RedPacket title={item.description} />
           {key == this.state.packets.length - 1 && this.state.infoShow ? this._renderGetRedPacket(this.state.showLast,item) : this._renderGetRedPacket(item.redPacketCount,item)}
         </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linking , View, Text, Image, StyleSheet, Dimensions, StatusBar, NavigatorIOS, TouchableWithoutFeedback } from 'react-native';
+import {AsyncStorage, Linking , View, Text, Image, StyleSheet, Dimensions, StatusBar, NavigatorIOS, TouchableWithoutFeedback } from 'react-native';
 const {height, width} = Dimensions.get('window');
 import IM from '../IM';
 
@@ -16,15 +16,21 @@ class Index extends React.PureComponent {
     this.state = {
       totalCount:3,
       money_arr:[0.95,0.95,0.5],
-      totalMoney:20
+      totalMoney:20,
+      lastTime:"20:43"
     }
   }
 
   componentDidMount() {
+    this._getLastTime()
     Linking.addEventListener('url', (e)=>this._handleOpenURL(e));
   }
   componentWillUnmount() {
     Linking.removeEventListener('url',(e)=>this._handleOpenURL(e));
+  }
+
+  componentWillReceiveProps(nextProps){
+    this._getLastTime()
   }
 
 
@@ -53,6 +59,17 @@ class Index extends React.PureComponent {
     })
   }
 
+  async _getLastTime(){
+     let time = await AsyncStorage.getItem('lastPacketTime')
+      console.log('time',time)
+    if(time){
+      this.setState({
+        lastTime:time
+      })
+    }
+
+  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -72,7 +89,10 @@ class Index extends React.PureComponent {
               },
               rightButtonIcon: require('../../assets/people.png'),
             })}>
-        <Image style={ styles.indexPhoto } source={require('../../assets/index.png')} />
+        <View>
+          <Image style={ styles.indexPhoto } source={require('../../assets/IMG_5172.png')} />
+          <Text style={{position:'absolute',color:'#999999',top:72,right:6,fontSize:12}}>{this.state.lastTime}</Text>
+        </View>
       </TouchableWithoutFeedback>
       </View>
     );
