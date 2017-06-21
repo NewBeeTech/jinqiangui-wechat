@@ -35,6 +35,7 @@ class IM extends React.PureComponent {
   };
   async componentWillMount() {
     const value = await AsyncStorage.getItem('packets');
+
     this.setState({
       packets: JSON.parse(value) || [],
     });
@@ -85,11 +86,12 @@ class IM extends React.PureComponent {
             <Image source={require('../../assets/smallRed.png')} style={{width:8,height:12}}/>
             <Text onPress={(i)=>{
 
-            }} style={{fontSize:12,color:'white'}}>测试已经领取了<Text onPress={()=>{
+            }} style={{fontSize:12,color:'white'}}>金钱龟{i+1}已经领取了<Text onPress={()=>{
               this.props.navigator.push({
                 title:'红包详情',
                 component:PacketDetail,
-                onLeftButtonPress:()=>this.props.navBarHidden(true),
+                backButtonTitle:"微信",
+                onBackButtonPress:()=>{console.log('back');this.props.navBarHidden(true)},
                 passProps:{
                   redPacketCount:item.redPacketCount,
                   totalMoney:item.totalMoney,
@@ -115,12 +117,11 @@ class IM extends React.PureComponent {
   }
   renderPackets() {
     return this.state.packets && this.state.packets.map((item, key) => {
-          console.log('item',item);
       return (
         <View key={key} style={{ flexDirection: 'column', alignItems: 'center'}}>
           <Text style={{ marginTop: 10, textAlign: 'center', width: 50, color: 'white', backgroundColor: 'rgba(200, 200, 200, 1.00)', borderRadius: 10, }}>{new Date(item.date).getHours()}:{new Date(item.date).getMinutes()}</Text>
           <RedPacket title={item.description} />
-          {key == this.state.packets.length - 1 && this.state.infoShow ? this._renderGetRedPacket(this.state.showLast,item) : this._renderGetRedPacket(this.props.redPacketCount,item)}
+          {key == this.state.packets.length - 1 && this.state.infoShow ? this._renderGetRedPacket(this.state.showLast,item) : this._renderGetRedPacket(item.redPacketCount,item)}
         </View>
       );
     });

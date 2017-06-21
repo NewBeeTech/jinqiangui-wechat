@@ -12,6 +12,24 @@ const styles = StyleSheet.create({
   }
 })
 
+function toDecimal2(x) {
+  var f = parseFloat(x);
+  if (isNaN(f)) {
+    return false;
+  }
+  var f = Math.round(x*100)/100;
+  var s = f.toString();
+  var rs = s.indexOf('.');
+  if (rs < 0) {
+    rs = s.length;
+    s += '.';
+  }
+  while (s.length <= rs + 2) {
+    s += '0';
+  }
+  return s;
+}
+
 
 class Index extends React.PureComponent {
   constructor(props){
@@ -23,16 +41,66 @@ class Index extends React.PureComponent {
     this.props.navBarHidden(false)
   }
 
-  _renderAnswerList(list){
-    console.log('list',list)
-    return list.map((item,index)=>{
+  setRandomNumber(money){
+    var random_money = parseFloat(toDecimal2(Math.random() * 100))
+    console.log('random_money',money,random_money)
+    if(money > random_money){
+      console.log('random_money>>>___',money,random_money)
+
+      return random_money
+    }else{
+      random_money = this.setRandomNumber(money)
+    }
+    return random_money
+  }
+
+  _renderAnswerList(list,redPacketCount){
+    let total = this.props.totalMoney;
+    var arr = list.slice(0)
+
+    if(redPacketCount > list.length){
+      var arr_money = 0
+      var left_count = redPacketCount - list.length
+      for(var money of list){
+        arr_money += parseFloat(money)
+      }
+      var left_money = total - arr_money
+      let money = parseFloat(toDecimal2(left_money/left_count))
+      console.log('money',money,left_money,arr_money)
+
+      if(left_count === 1){
+        arr.push(left_money)
+      }else if(left_count > 1){
+        var left_total = 0;
+        var last_random = 0
+        for(var i = 0;i < left_count;i++){
+          if(i === left_count-1){
+            arr.push(toDecimal2(left_money-left_total))
+          }else{
+            if(i % 2 == 0){
+              last_random = this.setRandomNumber(money)
+              console.log('last_random',last_random)
+              var random_money = money - last_random
+              left_total += random_money
+              arr.push(toDecimal2(random_money))
+            }else{
+              var random_money = money + last_random
+              left_total += random_money
+              arr.push(toDecimal2(last_random + money))
+            }
+          }
+        }
+      }
+    }
+    console.log('arr',arr)
+    return arr.map((item,index)=>{
       return(
           <View key={index}>
             <View style={{padding:15}}>
               <View style={{flexDirection:'row'}}>
-                <Image style={{width:40,height:40,borderRadius:4}} source={require('../../assets/bigRedPacker.png')}/>
+                <Image style={{width:40,height:40,borderRadius:4}} source={require('../../assets/avator.png')}/>
                 <View style={{marginLeft:10}}>
-                  <Text style={{marginTop:4}}>测试</Text>
+                  <Text style={{marginTop:4}}>金钱龟{index+1}</Text>
                   <Text style={{marginTop:4,color:'#999999'}}>20:36</Text>
                 </View>
                 <Text style={{position:'absolute',right:0,top:4}}>{item}</Text>
@@ -46,7 +114,7 @@ class Index extends React.PureComponent {
 
   render() {
     return (
-        <ScrollView style={{flex:1}}>
+        <ScrollView style={{flex:1,marginBottom:64}}>
           <Image source={require('../../assets/PacketResult.png')} style={{width:width,height:150}}></Image>
           <View style={{backgroundColor:'rgb(241,241,241)',justifyContent:'center',alignItems:'center'}}>
             <View style={{flexDirection:'row',width:width,justifyContent:'center',alignItems:'center'}}>
@@ -61,7 +129,7 @@ class Index extends React.PureComponent {
 
           <Text style={{marginLeft:15,color:'#666666'}}>已领取{this.props.redPacketCount}/{this.props.redPacketCount}个，共{this.props.totalMoney}元</Text>
           <View style={{width:width,height:0.5,backgroundColor:'#f2f2f2',marginTop:5}}/>
-          {this._renderAnswerList(this.props.money_arr)}
+          {this._renderAnswerList(this.props.money_arr,this.props.redPacketCount)}
           <View style={{width:width,height:0.5,backgroundColor:'#f2f2f2'}}/>
         </ScrollView>
     );

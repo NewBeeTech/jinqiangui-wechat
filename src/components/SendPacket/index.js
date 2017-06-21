@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, Image, TextInput, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback, TouchableHighlight, AsyncStorage } from 'react-native';
+import { ScrollView, View, Text, Image, TextInput, StyleSheet, Dimensions, StatusBar, TouchableWithoutFeedback, TouchableHighlight, AsyncStorage } from 'react-native';
 const {height, width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F2F2',
+    width:width,
+    height:height
   },
   sendPacketBar: {
     width: width,
@@ -200,97 +202,100 @@ class SendPacket extends React.PureComponent {
   }
   render() {
     return (
-      <View style={styles.container}>
-        <StatusBar
-          backgroundColor="black"
-          barStyle="default"
-        />
-      <TouchableWithoutFeedback onPress={() => this.props.navigator.pop()}>
-        <Image style={styles.sendPacketBar} source={require('../../assets/send-packet-bar.jpg')} />
-      </TouchableWithoutFeedback>
-      <View style={styles.totalNumber}>
-        <View style={styles.totalNumberLeft}>
-          <Image source={require('../../assets/ping.png')} style={{ width: 17, height: 17, marginRight: 5, }} />
-          <Text style={{ fontSize: 18 }}>总金额</Text>
-        </View>
-        <View style={styles.totalNumberRight}>
-          <TextInput style={{ height: 50, width: 50, textAlign: 'right' }} placeholder="0.00" onChangeText={(text) => this.changeTotalMoney(text)} />
-          <Text style={{ fontSize: 18, marginLeft: 10 }}>元</Text>
-        </View>
-      </View>
-      <View style={ styles.description }>
-        <Text>当前为拼手气红包，</Text><Text style={{ color: '#50658F' }}>改为普通红包</Text>
-      </View>
-      <View style={styles.totalNumber}>
-        <View style={styles.totalNumberLeft}>
-          <Text style={{ fontSize: 18 }}>红包个数</Text>
-        </View>
-        <View style={styles.totalNumberRight}>
-          <TextInput style={{ height: 50, width: 80, textAlign: 'right' }} placeholder="填写个数" onChangeText={(text) => this.changePacketNumber(text)} />
-          <Text style={{ fontSize: 18, marginLeft: 10 }}>个</Text>
-        </View>
-      </View>
-      <View style={styles.description}>
-        <Text style={{ color: '#AAAAAA' }}>本群共12人</Text>
-      </View>
-      <TextInput
-        style={styles.textArea}
-        placeholder="恭喜发财，大吉大利"
-        multiline
-        placeholderTextColor="#AAAAAA"
-        onChangeText={(text) => this.changeDescription(text)}
-      />
-      <View style={ styles.totalMoney } >
-        <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{`${this.state.totalMoney}.00`}</Text>
-      </View>
-      <TouchableHighlight style={styles.sendBtn} onPress={() => this.setState({ showModal: true })}>
-        <View>
-          <Text style={{ color: 'white', fontSize: 18 }}>塞钱进红包</Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight style={styles.snow} onPress={() => this.clearPackets()}>
-        <Image style={styles.snow} source={require('../../assets/snow.png')} />
-      </TouchableHighlight>
-      <View
-        style={{
-          width,
-          height,
-          position: 'absolute',
-          alignItems: 'center',
-          justifyContent: 'center',
-          left: 0,
-          top: 0,
-          backgroundColor: 'rgba(85, 85, 85, 0.8)',
-          display: this.state.showModal ? '' : 'none',
-        }}
-      >
-        <View style={styles.modalAlert}>
-          <View style={styles.modalHeader}>
-            <TouchableHighlight onPress={() => this.setState({ showModal: false })}>
-            <Image source={require('../../assets/close.png')} style={{ width: 12, height: 12 }} />
-            </TouchableHighlight>
-            <Text style={{ textAlign: 'center', width: '90%', fontSize: 16 }}>请输入支付密码</Text>
+          <ScrollView style={{flex:1,backgroundColor:'#f2f2f2'}}>
+          <View style={styles.container}>
+            <StatusBar
+              backgroundColor="black"
+              barStyle="default"
+            />
+          <TouchableWithoutFeedback onPress={() => this.props.navigator.pop()}>
+            <Image style={styles.sendPacketBar} source={require('../../assets/send-packet-bar.jpg')} />
+          </TouchableWithoutFeedback>
+          <View style={styles.totalNumber}>
+            <View style={styles.totalNumberLeft}>
+              <Image source={require('../../assets/ping.png')} style={{ width: 17, height: 17, marginRight: 5, }} />
+              <Text style={{ fontSize: 18 }}>总金额</Text>
+            </View>
+            <View style={styles.totalNumberRight}>
+              <TextInput keyboardType='numeric' style={{ height: 50, width: 50, textAlign: 'right' }} placeholder="0.00" onChangeText={(text) => this.changeTotalMoney(text)} />
+              <Text style={{ fontSize: 18, marginLeft: 10 }}>元</Text>
+            </View>
           </View>
-          <View style={styles.modalBody}>
-            <Text>微信红包</Text>
-            <Text style={{ fontSize: 40, margin: 10 }}>￥{`${this.state.totalMoney}.00`}</Text>
+          <View style={ styles.description }>
+            <Text>当前为拼手气红包，</Text><Text style={{ color: '#50658F' }}>改为普通红包</Text>
           </View>
-          <View style={styles.modalMoney}>
-            <Image source={require('../../assets/money.png')} style={{ height: 22, width: 22, marginRight: 10 }} />
-            <Text style={{ fontSize: 16, color: '#AAAAAA', width: 200}}>零钱</Text>
-            <Image source={require('../../assets/arrow-right.png')} style={{ height: 12, width: 12 }} />
+          <View style={styles.totalNumber}>
+            <View style={styles.totalNumberLeft}>
+              <Text style={{ fontSize: 18 }}>红包个数</Text>
+            </View>
+            <View style={styles.totalNumberRight}>
+              <TextInput keyboardType='numeric' style={{ height: 50, width: 80, textAlign: 'right' }} placeholder="填写个数" onChangeText={(text) => this.changePacketNumber(text)} />
+              <Text style={{ fontSize: 18, marginLeft: 10 }}>个</Text>
+            </View>
           </View>
-          <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <TextInput ref="ref1" autoFocus secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 1)} />
-            <TextInput ref="ref2" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 2)} />
-            <TextInput ref="ref3" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 3)} />
-            <TextInput ref="ref4" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 4)} />
-            <TextInput ref="ref5" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 5)} />
-            <TextInput ref="ref6" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 6)} />
+          <View style={styles.description}>
+            <Text style={{ color: '#AAAAAA' }}>本群共12人</Text>
           </View>
-        </View>
-      </View>
-      </View>
+          <TextInput
+            style={styles.textArea}
+            placeholder="恭喜发财，大吉大利"
+            multiline
+            placeholderTextColor="#AAAAAA"
+            onChangeText={(text) => this.changeDescription(text)}
+          />
+          <View style={ styles.totalMoney } >
+            <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{`${this.state.totalMoney}.00`}</Text>
+          </View>
+          <TouchableHighlight style={styles.sendBtn} onPress={() => this.setState({ showModal: true })}>
+            <View>
+              <Text style={{ color: 'white', fontSize: 18 }}>塞钱进红包</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.snow} onPress={() => this.clearPackets()}>
+            <Image style={styles.snow} source={require('../../assets/snow.png')} />
+          </TouchableHighlight>
+          <View
+            style={{
+              width,
+              height,
+              position: 'absolute',
+              alignItems: 'center',
+              justifyContent: 'center',
+              left: 0,
+              top: 0,
+              backgroundColor: 'rgba(85, 85, 85, 0.8)',
+              display: this.state.showModal ? '' : 'none',
+            }}
+          >
+            <View style={styles.modalAlert}>
+              <View style={styles.modalHeader}>
+                <TouchableHighlight onPress={() => this.setState({ showModal: false })}>
+                <Image source={require('../../assets/close.png')} style={{ width: 12, height: 12 }} />
+                </TouchableHighlight>
+                <Text style={{ textAlign: 'center', width: '90%', fontSize: 16 }}>请输入支付密码</Text>
+              </View>
+              <View style={styles.modalBody}>
+                <Text>微信红包</Text>
+                <Text style={{ fontSize: 40, margin: 10 }}>￥{`${this.state.totalMoney}.00`}</Text>
+              </View>
+              <View style={styles.modalMoney}>
+                <Image source={require('../../assets/money.png')} style={{ height: 22, width: 22, marginRight: 10 }} />
+                <Text style={{ fontSize: 16, color: '#AAAAAA', width: 200}}>零钱</Text>
+                <Image source={require('../../assets/arrow-right.png')} style={{ height: 12, width: 12 }} />
+              </View>
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                <TextInput keyboardType='numeric' ref="ref1" autoFocus secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 1)} />
+                <TextInput keyboardType='numeric' ref="ref2" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 2)} />
+                <TextInput keyboardType='numeric' ref="ref3" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 3)} />
+                <TextInput keyboardType='numeric' ref="ref4" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 4)} />
+                <TextInput keyboardType='numeric' ref="ref5" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 5)} />
+                <TextInput keyboardType='numeric' ref="ref6" secureTextEntry style={styles.modalInput} onChangeText={(text) => this.passwordChange(text, 6)} />
+              </View>
+            </View>
+          </View>
+          </View>
+          </ScrollView>
+
     );
   }
 }

@@ -63,7 +63,7 @@ class Index extends React.PureComponent {
       <TouchableWithoutFeedback onPress={() => this.props.navigator.push({
               title: '金钱龟测试群（12）',
               component: IM,
-              backButtonTitle: 'close',
+              backButtonTitle: '关闭',
               passProps:{
                  redPacketCount:this.state.totalCount,
                  totalMoney:this.state.totalMoney,
