@@ -95,7 +95,11 @@ class Index extends React.PureComponent {
         }
       }
     }
-    console.log('arr',arr)
+
+    let max = Math.max.apply({},arr.map(((item,index)=>{
+      return toDecimal2(item)
+    })))
+
     return arr.map((item,index)=>{
       return(
           <View key={index}>
@@ -104,12 +108,20 @@ class Index extends React.PureComponent {
                 <Image style={{width:40,height:40,borderRadius:4}} source={require('../../assets/avator.png')}/>
                 <View style={{marginLeft:10}}>
                   <Text style={{marginTop:4}}>金钱龟{index+1}</Text>
-                  <Text style={{marginTop:4,color:'#999999'}}>{new Date(this.props.date).getHours()}:{new Date(this.props.date).getMinutes()}</Text>
+                  {index == arr.length - 1 ?
+                      <Text style={{marginTop:4,color:'rgb(30,89,165)'}}>留言</Text>
+                      :
+                      <Text style={{marginTop:4,color:'#999999'}}>{new Date(this.props.date).getHours()}:{new Date(this.props.date).getMinutes()}</Text>
+                  }
                 </View>
                 <Text style={{position:'absolute',right:0,top:4}}>{item}元</Text>
               </View>
+              {item == max && <Image source={require('../../assets/crown.png')} style={{width:10,height:10,position:'absolute',right:75,top:45}}/>}
+              {item == max && <Text style={{position:'absolute',right:15,top:45,color:'rgb(254,189,83)',fontSize:13}}>手气最佳</Text>}
+
             </View>
-            {index !== list.length - 1 && <View style={{marginLeft:15,height:0.5,backgroundColor:'#f2f2f2'}}/>}
+
+            {index !== arr.length - 1 && <View style={{marginLeft:15,height:0.5,backgroundColor:'#f2f2f2'}}/>}
           </View>
       )
     })
@@ -126,14 +138,15 @@ class Index extends React.PureComponent {
             </View>
             <Text style={{marginTop:10}}>{this.props.packetTitle}</Text>
             <Text style={{marginTop:20,fontSize:40,fontWeight:'bold',color:'rgb(48,48,48)'}}>{this.props.totalMoney+'.0'}<Text style={{fontSize:12}}>  元</Text></Text>
-            <Text style={{marginTop:10,color:'rgb(30,89,165)'}}>已存入零钱，可直接消费</Text>
             <Image source={require('../../assets/packerResultBottom.png')} style={{width:width,height:40}}></Image>
           </View>
 
-          <Text style={{marginLeft:15,color:'#666666'}}>已领取{this.props.redPacketCount}/{this.props.redPacketCount}个，共{this.props.totalMoney}元</Text>
-          <View style={{width:width,height:0.5,backgroundColor:'#f2f2f2',marginTop:5}}/>
+          <Text style={{marginLeft:15,color:'#666666'}}>{this.props.redPacketCount}个红包共{this.props.totalMoney}元，5秒被抢光</Text>
+          <View style={{width:width,height:0.5,backgroundColor:'#f2f2f2',marginTop:8}}/>
           {this._renderAnswerList(this.props.money_arr,this.props.redPacketCount)}
           <View style={{width:width,height:0.5,backgroundColor:'#f2f2f2'}}/>
+
+          <Text style={{alignSelf:'center',marginTop:20,marginBottom:20,color:'rgb(30,89,165)'}}>查看我的红包记录</Text>
         </ScrollView>
     );
   }
