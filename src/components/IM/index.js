@@ -90,8 +90,10 @@ class IM extends React.PureComponent {
               this.props.navigator.push({
                 title:'微信红包',
                 component:PacketDetail,
-                backButtonTitle:"微信",
-                onBackButtonPress:()=>{console.log('back');this.props.navBarHidden(true)},
+                leftButtonTitle: '< 返回',
+                rightButtonTitle: '',
+                onLeftButtonPress:()=>{this.props.navigator.pop();this.props.navBarHidden(true);},
+                // onBackButtonPress:()=>{console.warn('back');this.props.navBarHidden(true)},
                 passProps:{
                   redPacketCount:item.redPacketCount,
                   totalMoney:item.totalMoney,
