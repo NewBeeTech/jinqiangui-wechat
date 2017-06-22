@@ -88,10 +88,12 @@ class IM extends React.PureComponent {
 
             }} style={{fontSize:12,color:'white'}}>金钱龟{i+1}已经领取了<Text onPress={()=>{
               this.props.navigator.push({
-                title:'红包详情',
+                title:'红包详情!!',
                 component:PacketDetail,
-                backButtonTitle:"微信",
-                onBackButtonPress:()=>{console.log('back');this.props.navBarHidden(true)},
+                leftButtonTitle: '< 返回',
+                rightButtonTitle: '',
+                onLeftButtonPress:()=>{this.props.navigator.pop();this.props.navBarHidden(true);},
+                // onBackButtonPress:()=>{console.warn('back');this.props.navBarHidden(true)},
                 passProps:{
                   redPacketCount:item.redPacketCount,
                   totalMoney:item.totalMoney,
