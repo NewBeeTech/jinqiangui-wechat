@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 
 class SendPacket extends React.PureComponent {
   state={
-    totalMoney: 0,
+    totalMoney: "0",
     packetNumber: 0,
     description: '',
     showModal: false,
@@ -141,7 +141,7 @@ class SendPacket extends React.PureComponent {
   }
   changeTotalMoney(text) {
     this.setState({
-      totalMoney: Number(text),
+      totalMoney: text,
     });
   }
   changePacketNumber(text) {
@@ -155,7 +155,16 @@ class SendPacket extends React.PureComponent {
     })
   }
 
-
+  _renderRandomArr(count){
+    var randomArr = []
+    for(var i = 1;i <= count;i++){
+      randomArr.push(i)
+    }
+    randomArr.sort(function () {
+      return 0.5-Math.random()
+    })
+    return randomArr
+  }
 
   async passwordChange(text, index) {
     this.refs[`ref${index+1}`] && this.refs[`ref${index+1}`].focus();
@@ -164,14 +173,18 @@ class SendPacket extends React.PureComponent {
       packets = packets || JSON.stringify([]);
       if (packets) {
         let packetsObject = JSON.parse(packets);
+        let random_arr = this._renderRandomArr(this.props.redPacketCount)
         packetsObject.push({
           totalMoney: this.props.totalMoney,
           redPacketCount: this.props.redPacketCount,
           money_arr:this.props.money_arr,
           description: this.state.description,
-          date: (new Date()).valueOf()
+          date: (new Date()).valueOf(),
+          random_arr:random_arr
         });
         await AsyncStorage.setItem('packets', JSON.stringify(packetsObject));
+        await AsyncStorage.setItem('last_getter', random_arr[random_arr.length - 1].toString());
+
         this.props.navigator.pop({
           passProps: {
             packets: packetsObject,
@@ -244,7 +257,7 @@ class SendPacket extends React.PureComponent {
             onChangeText={(text) => this.changeDescription(text)}
           />
           <View style={ styles.totalMoney } >
-            <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{`${this.state.totalMoney}.00`}</Text>
+            <Text style={{ fontSize: 25 }}>￥</Text><Text style={{ fontSize: 50 }}>{this.state.totalMoney.indexOf('.') > 0 ? this.state.totalMoney : (this.state.totalMoney || 0) + '.00'}</Text>
           </View>
           <TouchableHighlight style={styles.sendBtn} onPress={() => this.setState({ showModal: true })}>
             <View>

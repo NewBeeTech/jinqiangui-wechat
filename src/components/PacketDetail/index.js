@@ -99,7 +99,10 @@ class Index extends React.PureComponent {
     let max = Math.max.apply({},arr.map(((item,index)=>{
       return toDecimal2(item)
     })))
-
+    var detail_random_arr = this.props.random_arr.slice(0).reverse()
+    arr.sort(function () {
+      return 0.5-Math.random()
+    })
     return arr.map((item,index)=>{
       return(
           <View key={index}>
@@ -107,12 +110,8 @@ class Index extends React.PureComponent {
               <View style={{flexDirection:'row'}}>
                 <Image style={{width:40,height:40,borderRadius:4}} source={require('../../assets/avator.png')}/>
                 <View style={{marginLeft:10}}>
-                  <Text style={{marginTop:4}}>金钱龟{index+1}</Text>
-                  {index == arr.length - 1 ?
-                      <Text style={{marginTop:4,color:'rgb(30,89,165)'}}>留言</Text>
-                      :
-                      <Text style={{marginTop:4,color:'#999999'}}>{new Date(this.props.date).getHours()}:{new Date(this.props.date).getMinutes()}</Text>
-                  }
+                  <Text style={{marginTop:4}}>金钱龟{detail_random_arr[index]}</Text>
+                  <Text style={{marginTop:4,color:'#999999'}}>{new Date(this.props.date).getHours()}:{new Date(this.props.date).getMinutes()}</Text>
                 </View>
                 <Text style={{position:'absolute',right:0,top:4}}>{item}元</Text>
               </View>
@@ -137,7 +136,6 @@ class Index extends React.PureComponent {
               <Image style={{marginLeft:6,width:14,height:14}} source={require('../../assets/pin.png')}/>
             </View>
             <Text style={{marginTop:10}}>{this.props.packetTitle}</Text>
-            <Text style={{marginTop:20,fontSize:40,fontWeight:'bold',color:'rgb(48,48,48)'}}>{this.props.totalMoney+'.0'}<Text style={{fontSize:12}}>  元</Text></Text>
             <Image source={require('../../assets/packerResultBottom.png')} style={{width:width,height:40}}></Image>
           </View>
 

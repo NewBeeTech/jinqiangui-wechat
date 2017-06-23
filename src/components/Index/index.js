@@ -61,10 +61,12 @@ class Index extends React.PureComponent {
 
   async _getLastTime(){
      let time = await AsyncStorage.getItem('lastPacketTime')
-      console.log('time',time)
+     let last_getter = await AsyncStorage.getItem('last_getter');
+
     if(time){
       this.setState({
-        lastTime:time
+        lastTime:time,
+        last_getter:last_getter
       })
     }
 
@@ -90,8 +92,10 @@ class Index extends React.PureComponent {
               rightButtonIcon: require('../../assets/people.png'),
             })}>
         <View>
-          <Image style={ styles.indexPhoto } source={require('../../assets/IMG_5172.png')} />
+          <Image style={ styles.indexPhoto } source={require('../../assets/IMG_5175.png')} />
           <Text style={{position:'absolute',color:'#999999',top:72,right:6,fontSize:12}}>{this.state.lastTime}</Text>
+          {this.state.last_getter && <Text style={{position:'absolute',color:'#999999',top:95,left:64,fontSize:13}}>金钱龟{this.state.last_getter}领取了您的红包，您的红包已被领完</Text>}
+
         </View>
       </TouchableWithoutFeedback>
       </View>

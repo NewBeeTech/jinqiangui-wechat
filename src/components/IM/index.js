@@ -54,8 +54,8 @@ class IM extends React.PureComponent {
     this.setState({
       packets: value_Obj || [],
     });
-
   }
+
 
   componentWillUnmount() {
     // 请注意Un"m"ount的m是小写
@@ -79,6 +79,7 @@ class IM extends React.PureComponent {
   }
 
   _renderGetRedPacket(count,item){
+    console.log('been_call')
     var items = [];
     for (var i = 0;i < count;i++){
       items.push((
@@ -86,7 +87,7 @@ class IM extends React.PureComponent {
             <Image source={require('../../assets/smallRed.png')} style={{width:8,height:12}}/>
             <Text onPress={(i)=>{
 
-            }} style={{fontSize:12,color:'white'}}>金钱龟{i+1}已经领取了<Text onPress={()=>{
+            }} style={{fontSize:12,color:'white'}}>金钱龟{item.random_arr[i] || i}已经领取了<Text onPress={()=>{
               this.props.navigator.push({
                 title:'微信红包',
                 component:PacketDetail,
@@ -100,7 +101,8 @@ class IM extends React.PureComponent {
                   money_arr:item.money_arr,
                   packetTitle:item.description,
                   navBarHidden:this.props.navBarHidden,
-                  date:item.date
+                  date:item.date,
+                  random_arr:item.random_arr
                 }
               })
             }} style={{fontSize:12,color:'rgb(247,157,69)'}}>红包</Text>{item.redPacketCount == i+1 && "，您的红包已经被领完"}</Text>
@@ -119,7 +121,11 @@ class IM extends React.PureComponent {
     });
   }
   _renderTime(item,key){
-    let time = new Date(item.date).getHours() + ":" + new Date(item.date).getMinutes()
+    var min = new Date(item.date).getMinutes()
+    if(min < 10){
+      min = "0" + min
+    }
+    let time = new Date(item.date).getHours() + ":" + min
     if(key == this.state.packets.length - 1){
       AsyncStorage.setItem('lastPacketTime',time).then(success=>{
 
@@ -174,7 +180,7 @@ class IM extends React.PureComponent {
     if (totalHeight < height) {
 
     } else {
-      this._scrollView.scrollTo({y:(totalHeight-height+100)});
+      this._scrollView.scrollTo({y:(totalHeight-height+100),animated:false});
     }
   }
 
