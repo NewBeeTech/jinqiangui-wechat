@@ -126,6 +126,19 @@ class Index extends React.PureComponent {
     })
   }
 
+  _renderTime(item,key){
+    var min = new Date(item.date).getMinutes()
+    var hour = new Date(this.props.date).getHours()
+    if(min < 10){
+      min = "0" + min
+    }
+    if(hour < 10){
+      hour = "0" + hour
+    }
+    let time = hour + ":" + min
+    return time
+  }
+
   render() {
     return (
         <ScrollView style={{flex:1,marginBottom:64}}>

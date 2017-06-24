@@ -87,7 +87,7 @@ class IM extends React.PureComponent {
             <Image source={require('../../assets/smallRed.png')} style={{width:8,height:12}}/>
             <Text onPress={(i)=>{
 
-            }} style={{fontSize:12,color:'white'}}>金钱龟{item.random_arr[i] || i}已经领取了<Text onPress={()=>{
+            }} style={{fontSize:12,color:'white'}}>金钱龟{item.random_arr[i] || i+1}已经领取了<Text onPress={()=>{
               this.props.navigator.push({
                 title:'微信红包',
                 component:PacketDetail,

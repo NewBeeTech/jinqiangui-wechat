@@ -94,7 +94,7 @@ class Index extends React.PureComponent {
         <View>
           <Image style={ styles.indexPhoto } source={require('../../assets/IMG_5175.png')} />
           <Text style={{position:'absolute',color:'#999999',top:72,right:6,fontSize:12}}>{this.state.lastTime}</Text>
-          {this.state.last_getter && <Text style={{position:'absolute',color:'#999999',top:95,left:64,fontSize:13}}>金钱龟{this.state.last_getter}领取了您的红包，您的红包已被领完</Text>}
+          {this.state.last_getter && <Text style={{position:'absolute',color:'#999999',top:height / 7,left:width/5.9,fontSize:13}}>金钱龟{this.state.last_getter}领取了您的红包，您的红包已被领完</Text>}
 
         </View>
       </TouchableWithoutFeedback>
